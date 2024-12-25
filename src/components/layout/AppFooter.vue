@@ -6,7 +6,7 @@
         <a href="https://kenvie.com" class="footer-link" target="_blank">作者</a>
         <a href="#" class="footer-link">关于</a>
         <a href="#" class="footer-link">反馈</a>
-        <a href="#" class="footer-link">GitHub</a>
+        <a href="https://github.com/cpt-kenvie/Web-Tools" class="footer-link" target="_blank">GitHub</a>
       </div>
     </div>
   </footer>
