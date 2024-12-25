@@ -1,5 +1,57 @@
-# Vue 3 + Vite
+# Web Tools Collection
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+一个集成了多种实用开发工具的在线工具集合网站。
 
-Learn more about IDE Support for Vue in the [Vue Docs Scaling up Guide](https://vuejs.org/guide/scaling-up/tooling.html#ide-support).
+## 功能特点
+
+### 开发工具
+
+1. **JSON 格式化**
+   - JSON 数据格式化和美化
+   - 语法错误检测
+   - 一键复制功能
+
+2. **正则表达式测试**
+   - 实时正则表达式匹配测试
+   - 支持多种正则表达式标志
+   - 显示匹配结果
+
+3. **JSON 校验与解析**
+   - JSON 格式验证
+   - 数据类型分析
+   - 数据结构统计
+
+4. **API 调试工具**
+   - 支持 GET、POST、PUT、DELETE 请求
+   - 自定义请求头
+   - JSON 格式请求体
+   - 响应数据展示
+   - 请求耗时统计
+
+5. **Base64 转换**
+   - 文本转 Base64
+   - Base64 转文本
+   - 文件转 Base64
+   - 支持文件预览
+
+6. **加密解密工具**
+   - 支持 MD5、SHA1、SHA256、SHA512 哈希计算
+   - 文件哈希计算
+   - AES 加密解密
+   - 一键复制结果
+
+### 常用工具
+
+1. **时间转换**
+   - 时间戳转换
+   - UTC/本地时间转换
+   - 实时时间显示
+   - 日期格式化
+
+## 技术栈
+
+- Vue 3
+- Vite
+- Vue Router
+- Crypto-js
+
