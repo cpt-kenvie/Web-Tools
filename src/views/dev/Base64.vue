@@ -85,6 +85,7 @@
 
 <script setup>
 import { ref } from 'vue'
+import { showSuccessNotification, showErrorNotification } from '@/utils/notification.js'
 
 // 文本转换相关
 const textInput = ref('')
@@ -104,8 +105,9 @@ const textToBase64 = () => {
       throw new Error('请输入要转换的文本')
     }
     base64Output.value = btoa(unescape(encodeURIComponent(textInput.value)))
+    showSuccessNotification('转换成功！')
   } catch (error) {
-    alert('转换失败：' + error.message)
+    showErrorNotification('转换失败：' + error.message)
   }
 }
 
@@ -116,8 +118,9 @@ const base64ToText = () => {
       throw new Error('请输入 Base64 编码')
     }
     textOutput.value = decodeURIComponent(escape(atob(base64Input.value)))
+    showSuccessNotification('解码成功！')
   } catch (error) {
-    alert('解码失败：请确保输入的是有效的 Base64 编码')
+    showErrorNotification('解码失败：请确保输入的是有效的 Base64 编码')
   }
 }
 
@@ -150,9 +153,9 @@ const formatFileSize = (bytes) => {
 const copyToClipboard = async (text) => {
   try {
     await navigator.clipboard.writeText(text)
-    alert('已复制到剪贴板')
+    showSuccessNotification('已复制到剪贴板')
   } catch (error) {
-    alert('复制失败：' + error.message)
+    showErrorNotification('复制失败：' + error.message)
   }
 }
 

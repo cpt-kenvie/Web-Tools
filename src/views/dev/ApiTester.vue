@@ -63,15 +63,18 @@
         <div class="response-info" v-if="response.status">
           <span class="status">状态: {{ response.status }}</span>
           <span class="time">耗时: {{ response.time }}ms</span>
+          <button @click="copyToClipboard" class="copy-button">复制</button>
         </div>
-        <pre class="response-content">{{ response.data }}</pre>
+        <pre class="response-content" v-html="responseContent"></pre>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
+import hljs from 'highlight.js'
+import 'highlight.js/styles/default.css' // 选择您喜欢的样式
 
 const method = ref('GET')
 const url = ref('')
@@ -80,6 +83,11 @@ const requestBody = ref('')
 const response = ref({ status: '', time: '', data: '' })
 const tabs = ['请求头', '请求体']
 const currentTab = ref('请求头')
+const responseContent = ref('')
+
+watch(() => response.value.data, (newData) => {
+  responseContent.value = hljs.highlight('json', newData).value
+})
 
 const addHeader = () => {
   headers.value.push({ key: '', value: '' })
@@ -87,6 +95,16 @@ const addHeader = () => {
 
 const removeHeader = (index) => {
   headers.value.splice(index, 1)
+}
+
+const copyToClipboard = () => {
+  navigator.clipboard.writeText(response.value.data)
+    .then(() => {
+      alert('复制成功！')
+    })
+    .catch(err => {
+      console.error('复制失败:', err)
+    })
 }
 
 const sendRequest = async () => {
@@ -109,6 +127,11 @@ const sendRequest = async () => {
     }
 
     const res = await fetch(url.value, options)
+    
+    if (!res.ok) {
+      throw new Error(`HTTP error! status: ${res.status}`)
+    }
+
     const data = await res.json()
     
     response.value = {
@@ -271,5 +294,18 @@ const sendRequest = async () => {
   font-family: monospace;
   white-space: pre-wrap;
   overflow-x: auto;
+}
+
+.copy-button {
+  margin-left: 16px;
+  padding: 4px 8px;
+  border: none;
+  background-color: #2563eb;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.copy-button:hover {
+  background-color: #1d4ed8;
 }
 </style> 

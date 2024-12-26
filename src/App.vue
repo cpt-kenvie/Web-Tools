@@ -8,6 +8,7 @@
       </main>
     </div>
     <AppFooter />
+    <Notification v-if="notificationMessage" :message="notificationMessage" :type="notificationType" />
   </div>
 </template>
 
@@ -15,6 +16,8 @@
 import AppHeader from './components/layout/AppHeader.vue'
 import AppSidebar from './components/layout/AppSidebar.vue'
 import AppFooter from './components/layout/AppFooter.vue'
+import Notification from './components/Notification.vue'
+import { notificationMessage, notificationType } from '@/utils/notification.js'
 </script>
 
 <style>

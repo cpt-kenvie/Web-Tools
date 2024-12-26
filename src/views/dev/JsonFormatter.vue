@@ -14,7 +14,7 @@
         <button @click="clearInput" class="action-button secondary">清空</button>
       </div>
       <div class="output-section">
-        <pre class="json-output">{{ formattedJson }}</pre>
+        <pre class="json-output" v-html="formattedJsonContent"></pre>
       </div>
     </div>
   </div>
@@ -22,22 +22,25 @@
 
 <script setup>
 import { ref } from 'vue'
+import hljs from 'highlight.js'
+import 'highlight.js/styles/atom-one-dark.css' // 选择您喜欢的样式
 
 const inputJson = ref('')
-const formattedJson = ref('')
+const formattedJsonContent = ref('')
 
 const formatJson = () => {
   try {
     const parsed = JSON.parse(inputJson.value)
-    formattedJson.value = JSON.stringify(parsed, null, 2)
+    const formatted = JSON.stringify(parsed, null, 2)
+    formattedJsonContent.value = hljs.highlight('json', formatted).value
   } catch (error) {
-    formattedJson.value = '无效的 JSON 格式: ' + error.message
+    formattedJsonContent.value = '无效的 JSON 格式: ' + error.message
   }
 }
 
 const clearInput = () => {
   inputJson.value = ''
-  formattedJson.value = ''
+  formattedJsonContent.value = ''
 }
 </script>
 
