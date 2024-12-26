@@ -6,7 +6,8 @@ import {
   ClockIcon,
   ArrowPathIcon,
   KeyIcon,
-  DocumentDuplicateIcon
+  DocumentDuplicateIcon,
+  DocumentMagnifyingGlassIcon
 } from '@heroicons/vue/24/outline'
 
 const router = createRouter({
@@ -85,6 +86,16 @@ const router = createRouter({
       meta: {
         title: '时间转换',
         icon: ClockIcon,
+        group: 'tools'
+      }
+    },
+    {
+      path: '/tools/text-compare',
+      name: 'TextCompare',
+      component: () => import('../views/tools/TextCompare.vue'),
+      meta: {
+        title: '文本对比',
+        icon: DocumentMagnifyingGlassIcon,
         group: 'tools'
       }
     }
