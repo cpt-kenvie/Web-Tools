@@ -23,7 +23,8 @@
 <script setup>
 import { ref } from 'vue'
 import hljs from 'highlight.js'
-import 'highlight.js/styles/atom-one-dark.css' // 选择您喜欢的样式
+import 'highlight.js/styles/atom-one-dark.css'
+import { showSuccessNotification, showErrorNotification } from '@/utils/notification.js'
 
 const inputJson = ref('')
 const formattedJsonContent = ref('')
@@ -33,14 +34,24 @@ const formatJson = () => {
     const parsed = JSON.parse(inputJson.value)
     const formatted = JSON.stringify(parsed, null, 2)
     formattedJsonContent.value = hljs.highlight('json', formatted).value
+    showSuccessNotification('格式化成功！')
   } catch (error) {
-    formattedJsonContent.value = '无效的 JSON 格式: ' + error.message
+    showErrorNotification('无效的 JSON 格式: ' + error.message)
   }
 }
 
 const clearInput = () => {
   inputJson.value = ''
   formattedJsonContent.value = ''
+}
+
+const copyToClipboard = async () => {
+  try {
+    await navigator.clipboard.writeText(formattedJsonContent.value)
+    showSuccessNotification('已复制到剪贴板')
+  } catch (error) {
+    showErrorNotification('复制失败：' + error.message)
+  }
 }
 </script>
 

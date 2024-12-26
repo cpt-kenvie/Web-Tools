@@ -31,6 +31,7 @@
 
 <script setup>
 import { ref, watch } from 'vue'
+import { showSuccessNotification, showErrorNotification } from '@/utils/notification.js'
 
 const regex = ref('')
 const testText = ref('')
@@ -39,13 +40,13 @@ const matchResult = ref('')
 const testRegex = () => {
   try {
     if (!regex.value || !testText.value) {
-      matchResult.value = '请输入正则表达式和测试文本'
+      showErrorNotification('请输入正则表达式和测试文本')
       return
     }
 
     const regexParts = regex.value.match(/^\/(.+)\/([gimuy]*)$/)
     if (!regexParts) {
-      matchResult.value = '正则表达式格式无效'
+      showErrorNotification('正则表达式格式无效')
       return
     }
 
@@ -55,11 +56,13 @@ const testRegex = () => {
     
     if (matches) {
       matchResult.value = JSON.stringify(matches, null, 2)
+      showSuccessNotification('匹配成功！')
     } else {
       matchResult.value = '没有找到匹配项'
+      showErrorNotification('没有找到匹配项')
     }
   } catch (error) {
-    matchResult.value = '错误: ' + error.message
+    showErrorNotification('错误: ' + error.message)
   }
 }
 

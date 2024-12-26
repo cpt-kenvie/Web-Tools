@@ -74,7 +74,8 @@
 <script setup>
 import { ref, watch } from 'vue'
 import hljs from 'highlight.js'
-import 'highlight.js/styles/default.css' // 选择您喜欢的样式
+import 'highlight.js/styles/atom-one-dark.css'
+import { showSuccessNotification, showErrorNotification } from '@/utils/notification.js'
 
 const method = ref('GET')
 const url = ref('')
@@ -97,14 +98,13 @@ const removeHeader = (index) => {
   headers.value.splice(index, 1)
 }
 
-const copyToClipboard = () => {
-  navigator.clipboard.writeText(response.value.data)
-    .then(() => {
-      alert('复制成功！')
-    })
-    .catch(err => {
-      console.error('复制失败:', err)
-    })
+const copyToClipboard = async (text) => {
+  try {
+    await navigator.clipboard.writeText(text)
+    showSuccessNotification('已复制到剪贴板')
+  } catch (error) {
+    showErrorNotification('复制失败：' + error.message)
+  }
 }
 
 const sendRequest = async () => {
@@ -139,12 +139,14 @@ const sendRequest = async () => {
       time: Date.now() - startTime,
       data: JSON.stringify(data, null, 2)
     }
+    showSuccessNotification('请求成功！')
   } catch (error) {
     response.value = {
       status: 'Error',
       time: 0,
       data: error.message
     }
+    showErrorNotification('请求失败：' + error.message)
   }
 }
 </script>

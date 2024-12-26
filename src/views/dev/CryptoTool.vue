@@ -108,6 +108,7 @@
 <script setup>
 import { ref } from 'vue'
 import CryptoJS from 'crypto-js'
+import { showSuccessNotification, showErrorNotification } from '@/utils/notification.js'
 
 // 哈希计算相关
 const hashInput = ref('')
@@ -116,7 +117,7 @@ const hashTypes = ['MD5', 'SHA1', 'SHA256', 'SHA512']
 
 const calculateHash = (type) => {
   if (!hashInput.value) {
-    alert('请输入要计算哈希的文本')
+    showErrorNotification('请输入要计算哈希的文本')
     return
   }
 
@@ -140,6 +141,7 @@ const calculateHash = (type) => {
     type,
     value: result
   }
+  showSuccessNotification('哈希计算成功！')
 }
 
 // 文件哈希计算相关
@@ -186,8 +188,9 @@ const calculateFileHash = async (type) => {
       type,
       value: result
     }
+    showSuccessNotification('文件哈希计算成功！')
   } catch (error) {
-    alert('计算文件哈希失败：' + error.message)
+    showErrorNotification('计算文件哈希失败：' + error.message)
   } finally {
     isCalculating.value = false
   }
@@ -211,8 +214,9 @@ const aesEncrypt = () => {
       type: '加密',
       value: encrypted
     }
+    showSuccessNotification('加密成功！')
   } catch (error) {
-    alert('加密失败：' + error.message)
+    showErrorNotification('加密失败：' + error.message)
   }
 }
 
@@ -233,18 +237,19 @@ const aesDecrypt = () => {
       type: '解密',
       value: decrypted
     }
+    showSuccessNotification('解密成功！')
   } catch (error) {
-    alert('解密失败：' + error.message)
+    showErrorNotification('解密失败：' + error.message)
   }
 }
 
 const validateAesInput = () => {
   if (!aesKey.value) {
-    alert('请输入密钥')
+    showErrorNotification('请输入密钥')
     return false
   }
   if (!aesInput.value) {
-    alert('请输入要处理的文本')
+    showErrorNotification('请输入要处理的文本')
     return false
   }
   return true
@@ -267,9 +272,9 @@ const formatFileSize = (bytes) => {
 const copyToClipboard = async (text) => {
   try {
     await navigator.clipboard.writeText(text)
-    alert('已复制到剪贴板')
+    showSuccessNotification('已复制到剪贴板')
   } catch (error) {
-    alert('复制失败：' + error.message)
+    showErrorNotification('复制失败：' + error.message)
   }
 }
 </script>
