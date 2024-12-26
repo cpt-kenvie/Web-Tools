@@ -12,6 +12,8 @@
     "@heroicons/vue": "^2.2.0",
     "crypto-js": "^4.2.0",
     "highlight.js": "^11.11.1",
+    "jsqr": "^1.4.0",
+    "qrcode": "^1.5.4",
     "tools": "file:",
     "vue": "^3.5.13",
     "vue-router": "^4.5.0"

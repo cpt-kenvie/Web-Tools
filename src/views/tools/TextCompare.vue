@@ -2,6 +2,9 @@
   <div class="text-compare">
     <h2 class="page-title">文本对比工具</h2>
     <div class="compare-container">
+      <div v-if="diffMessage" class="diff-info" :class="{ 'same': diffMessage === '两段文本完全相同' }">
+        {{ diffMessage }}
+      </div>
       <div class="editor-section">
         <div class="editor-wrapper">
           <div class="editor-header">
@@ -97,6 +100,19 @@ const clearRight = () => {
   rightText.value = ''
 }
 
+// 查找字符级别的差异
+const findCharDifferences = (str1, str2) => {
+  const diffs = []
+  const maxLength = Math.max(str1.length, str2.length)
+  
+  for (let i = 0; i < maxLength; i++) {
+    if (str1[i] !== str2[i]) {
+      diffs.push(i)
+    }
+  }
+  return diffs
+}
+
 // 实时对比文本并高亮
 const compareTexts = () => {
   const leftLines = leftText.value.split('\n')
@@ -113,12 +129,25 @@ const compareTexts = () => {
   // 创建渐变背景
   const leftGradients = []
   const rightGradients = []
+  let differences = [] // 存储差异信息
 
   for (let i = 0; i < maxLines; i++) {
     const left = leftLines[i] || ''
     const right = rightLines[i] || ''
     const isEqual = left === right
     const color = isEqual ? '#dcfce7' : '#fee2e2'
+    
+    if (!isEqual) {
+      const charDiffs = findCharDifferences(left, right)
+      if (charDiffs.length > 0) {
+        differences.push({
+          line: i + 1,
+          position: charDiffs[0] + 1,
+          leftText: left,
+          rightText: right
+        })
+      }
+    }
     
     leftGradients.push(`${color} ${i * lineHeight}px, ${color} ${(i + 1) * lineHeight}px`)
     rightGradients.push(`${color} ${i * lineHeight}px, ${color} ${(i + 1) * lineHeight}px`)
@@ -136,7 +165,26 @@ const compareTexts = () => {
   } else {
     rightTextArea.style.background = 'none'
   }
+
+  // 显示差异信息
+  if (differences.length > 0) {
+    const diffInfo = differences.map(diff => {
+      const leftChar = diff.leftText[diff.position - 1] || '空'
+      const rightChar = diff.rightText[diff.position - 1] || '空'
+      return `第 ${diff.line} 行, 第 ${diff.position} 个字符: "${leftChar}" ≠ "${rightChar}"`
+    }).join('\n')
+    
+    // 更新差异信息显示
+    diffMessage.value = diffInfo
+  } else {
+    diffMessage.value = differences.length === 0 && (leftText.value || rightText.value) 
+      ? '两段文本完全相同'
+      : ''
+  }
 }
+
+// 添加差异信息的响应式引用
+const diffMessage = ref('')
 
 // 监听文本变化
 watch([leftText, rightText], () => {
@@ -273,5 +321,47 @@ watch([leftText, rightText], () => {
   .editor-section {
     flex-direction: column;
   }
+}
+
+.diff-info {
+  margin-bottom: 16px;
+  padding: 12px;
+  border-radius: 6px;
+  background-color: #fee2e2;
+  color: #991b1b;
+  font-size: 14px;
+  line-height: 1.5;
+  white-space: pre-line;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.diff-info.same {
+  background-color: #dcfce7;
+  color: #166534;
+}
+
+/* 确保背景跟随滚动 */
+.text-editor {
+  background-attachment: local !important;
+  background-repeat: no-repeat !important;
+}
+
+/* 优化滚动条样式 */
+.diff-info::-webkit-scrollbar {
+  width: 8px;
+}
+
+.diff-info::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.diff-info::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 4px;
+}
+
+.diff-info::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
 }
 </style> 

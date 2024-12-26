@@ -9,10 +9,7 @@
             :class="{ 'is-collapsed': collapsedGroups[group.name] }"
           >
             <span>{{ group.title }}</span>
-            <ChevronDownIcon 
-              class="collapse-icon"
-              :class="{ 'is-collapsed': collapsedGroups[group.name] }"
-            />
+            <ChevronDownIcon class="collapse-icon" />
           </div>
           <div 
             class="menu-items"
@@ -32,11 +29,6 @@
         </div>
       </div>
     </div>
-    <!-- 移动端菜单开关按钮 -->
-    <button class="mobile-toggle" @click="toggleMobileMenu">
-      <Bars3Icon v-if="!isOpen" class="toggle-icon" />
-      <XMarkIcon v-else class="toggle-icon" />
-    </button>
   </aside>
 </template>
 
@@ -61,6 +53,11 @@ const menuGroups = computed(() => {
       name: 'tools',
       title: '实用工具',
       routes: []
+    },
+    image: {
+      name: 'image',
+      title: '图像工具',
+      routes: []
     }
   }
 
@@ -84,119 +81,138 @@ const toggleMobileMenu = () => {
 
 <style scoped>
 .app-sidebar {
-  width: 280px;
+  width: 240px;
   background-color: #ffffff;
-  height: calc(100vh - 120px);
-  flex-shrink: 0;
-  overflow-y: auto;
+  height: calc(100vh - 60px);
   border-right: 1px solid #e5e7eb;
   position: sticky;
   left: 0;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
 }
 
 .sidebar-content {
-  padding: 16px 0;
+  padding: 12px 0;
 }
 
 .menu-groups {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 8px;
 }
 
 .menu-group {
   display: flex;
   flex-direction: column;
+  padding: 4px 0;
 }
 
 .menu-group-title {
-  padding: 0 24px;
-  font-size: 0.875rem;
+  padding: 8px 16px;
+  font-size: 12px;
   font-weight: 600;
   color: #6b7280;
-  margin-bottom: 8px;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
   display: flex;
   align-items: center;
   justify-content: space-between;
   cursor: pointer;
   user-select: none;
+  transition: color 0.15s ease;
+}
+
+.menu-group-title:hover {
+  color: #4b5563;
+}
+
+.collapse-icon {
+  width: 14px;
+  height: 14px;
+  color: #9ca3af;
+  transition: transform 0.2s ease;
+}
+
+.is-collapsed .collapse-icon {
+  transform: rotate(-90deg);
 }
 
 .menu-items {
   display: flex;
   flex-direction: column;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
   overflow: hidden;
-  max-height: 500px; /* 足够大的高度以容纳所有项目 */
+  max-height: 500px;
 }
 
 .menu-items.is-collapsed {
   max-height: 0;
 }
 
-.collapse-icon {
-  width: 16px;
-  height: 16px;
-  transition: transform 0.3s ease;
-}
-
-.collapse-icon.is-collapsed {
-  transform: rotate(-90deg);
-}
-
 .menu-item {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 10px 24px;
-  color: #4b5563;
+  gap: 8px;
+  padding: 6px 16px;
+  color: #374151;
   text-decoration: none;
-  font-size: 0.875rem;
-  transition: all 0.2s ease;
-  border-left: 3px solid transparent;
+  font-size: 13px;
+  transition: all 0.15s ease;
+  position: relative;
 }
 
 .menu-icon {
-  width: 20px;
-  height: 20px;
+  width: 16px;
+  height: 16px;
+  color: #6b7280;
+  flex-shrink: 0;
+  transition: color 0.15s ease;
 }
 
 .menu-item:hover {
-  background-color: #f3f4f6;
+  background-color: #f9fafb;
+}
+
+.menu-item:hover .menu-icon {
   color: #2563eb;
 }
 
 .menu-item.active {
-  background-color: #eff6ff;
   color: #2563eb;
-  border-left-color: #2563eb;
+  background-color: #eff6ff;
 }
 
-.mobile-toggle {
-  display: none;
-  position: fixed;
-  top: 70px;
-  left: 20px;
-  padding: 8px;
-  background-color: white;
-  border: 1px solid #e5e7eb;
-  border-radius: 6px;
-  cursor: pointer;
-  z-index: 1001;
+.menu-item.active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background-color: #2563eb;
 }
 
-.toggle-icon {
-  width: 24px;
-  height: 24px;
-  color: #4b5563;
+.menu-item.active .menu-icon {
+  color: #2563eb;
+}
+
+/* 自定义滚动条 */
+.app-sidebar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.app-sidebar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.app-sidebar::-webkit-scrollbar-thumb {
+  background-color: transparent;
+  border-radius: 4px;
+}
+
+.app-sidebar:hover::-webkit-scrollbar-thumb {
+  background-color: #e5e7eb;
 }
 
 @media (max-width: 768px) {
   .app-sidebar {
-    width: 240px;
     position: fixed;
     z-index: 1000;
     transform: translateX(-100%);
@@ -205,9 +221,42 @@ const toggleMobileMenu = () => {
   .app-sidebar.open {
     transform: translateX(0);
   }
+}
 
-  .mobile-toggle {
-    display: block;
+/* 暗色模式 */
+@media (prefers-color-scheme: dark) {
+  .app-sidebar {
+    background-color: #111827;
+    border-right-color: #1f2937;
+  }
+
+  .menu-group-title {
+    color: #9ca3af;
+  }
+
+  .menu-group-title:hover {
+    color: #d1d5db;
+  }
+
+  .menu-item {
+    color: #e5e7eb;
+  }
+
+  .menu-icon {
+    color: #6b7280;
+  }
+
+  .menu-item:hover {
+    background-color: #1f2937;
+  }
+
+  .menu-item.active {
+    background-color: #1e40af20;
+  }
+
+  .menu-item:hover .menu-icon,
+  .menu-item.active .menu-icon {
+    color: #3b82f6;
   }
 }
 </style> 

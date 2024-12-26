@@ -7,7 +7,10 @@ import {
   ArrowPathIcon,
   KeyIcon,
   DocumentDuplicateIcon,
-  DocumentMagnifyingGlassIcon
+  DocumentMagnifyingGlassIcon,
+  PhotoIcon,
+  ArrowsPointingInIcon,
+  QrCodeIcon
 } from '@heroicons/vue/24/outline'
 
 const router = createRouter({
@@ -97,6 +100,37 @@ const router = createRouter({
         title: '文本对比',
         icon: DocumentMagnifyingGlassIcon,
         group: 'tools'
+      }
+    },
+    {
+      path: '/tools/qrcode',
+      name: 'QRCodeGenerator',
+      component: () => import('../views/tools/QRCodeGenerator.vue'),
+      meta: {
+        title: '二维码解码',
+        icon: QrCodeIcon,
+        group: 'tools'
+      }
+    },
+    // 图像工具路由
+    {
+      path: '/image/converter',
+      name: 'ImageConverter',
+      component: () => import('../views/image/ImageConverter.vue'),
+      meta: {
+        title: '图片格式转换',
+        icon: PhotoIcon,
+        group: 'image'
+      }
+    },
+    {
+      path: '/image/compressor',
+      name: 'ImageCompressor',
+      component: () => import('../views/image/ImageCompressor.vue'),
+      meta: {
+        title: '图片压缩',
+        icon: ArrowsPointingInIcon,
+        group: 'image'
       }
     }
   ]
